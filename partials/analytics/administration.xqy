@@ -5,6 +5,11 @@ xdmp:set-response-content-type("text/html"),
 		<title>Business Semantics Administration</title>
 	</head>
 	<body>
+	<a href="/VSC/partials/analytics" target="_parent"><img src="VSC_EM.jpeg" alt="Chain of Responsability" align="top"/></a>
+	&nbsp;&nbsp;&nbsp;<hr />
+	<h2><a href="CPO2CEO.xqy">Temporarily Transfer CPO's Competencies to CEO</a></h2>
+	&nbsp;&nbsp;
+	<h2><a href="CEO2CPO.xqy">Restore CPO Competencies</a></h2>
 		<p>Powered by MarkLogic Server version {xdmp:version()}</p>
 	</body>
 </html>)
