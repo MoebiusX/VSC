@@ -1,0 +1,202 @@
+Event Definition
+Type - ie <http://example.org/marklogic/Event/Service2>
+Value - ie 1$
+Duration - ie 3s
+Risk - ie 0.0000001
+CX_group - ie TOP10
+Status ie start/stop/err
+
+
+xqueries
+
+===INSERT==== O2C
+import module namespace sem = "http://marklogic.com/semantics" 
+      at "/MarkLogic/semantics.xqy";
+  
+sem:rdf-insert( 
+  (
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Event/Order"),
+    sem:iri("http://example.org/marklogic/predicate/belongsTo"),
+    sem:iri("http://example.org/marklogic/Process/Order2Cash")
+    )
+    ,
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Event/Fill"),
+    sem:iri("http://example.org/marklogic/predicate/belongsTo"),
+    sem:iri("http://example.org/marklogic/Process/Order2Cash")
+    )
+    ,
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Event/Ship"),
+    sem:iri("http://example.org/marklogic/predicate/belongsTo"),
+    sem:iri("http://example.org/marklogic/Process/Order2Cash")
+    )
+    ,
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Event/Bill"),
+    sem:iri("http://example.org/marklogic/predicate/belongsTo"),
+    sem:iri("http://example.org/marklogic/Process/Order2Cash")
+    )
+    ,
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Event/Cash"),
+    sem:iri("http://example.org/marklogic/predicate/belongsTo"),
+    sem:iri("http://example.org/marklogic/Process/Order2Cash")
+    )
+,
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Process/Order2Cash"),
+    sem:iri("http://example.org/marklogic/predicate/responsabilityOf"),
+    sem:iri("http://example.org/marklogic/Official/CEO")
+    )    
+)
+)
+
+===INSERT==== Services
+import module namespace sem = "http://marklogic.com/semantics" 
+      at "/MarkLogic/semantics.xqy";
+  
+sem:rdf-insert( 
+  (
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Event/Service1"),
+    sem:iri("http://example.org/marklogic/predicate/belongsTo"),
+    sem:iri("http://example.org/marklogic/Process/Services")
+    )
+    ,
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Event/Service2"),
+    sem:iri("http://example.org/marklogic/predicate/belongsTo"),
+    sem:iri("http://example.org/marklogic/Process/Services")
+    )  
+	,
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Process/Services"),
+    sem:iri("http://example.org/marklogic/predicate/responsabilityOf"),
+    sem:iri("http://example.org/marklogic/Official/COO")
+    )
+  )
+)
+
+
+===INSERT==== CLOUD HOSTING
+import module namespace sem = "http://marklogic.com/semantics" 
+      at "/MarkLogic/semantics.xqy";
+  
+sem:rdf-insert( 
+  (
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Event/CH_E1"),
+    sem:iri("http://example.org/marklogic/predicate/belongsTo"),
+    sem:iri("http://example.org/marklogic/Process/CloudHosting")
+    )
+    ,
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Event/CH_E2"),
+    sem:iri("http://example.org/marklogic/predicate/belongsTo"),
+    sem:iri("http://example.org/marklogic/Process/CloudHosting")
+    )
+    ,
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Event/CH_E3"),
+    sem:iri("http://example.org/marklogic/predicate/belongsTo"),
+    sem:iri("http://example.org/marklogic/Process/CloudHosting")
+    )
+	,
+  sem:triple(
+    sem:iri("http://example.org/marklogic/Process/CloudHosting"),
+    sem:iri("http://example.org/marklogic/predicate/responsabilityOf"),
+    sem:iri("http://example.org/marklogic/Official/COO")
+    )
+  )
+)
+
+
+
+
+====QUERY====
+CPO
+SELECT *
+WHERE { ?Event  <http://example.org/marklogic/predicate/belongsTo> ?Process .  
+      ?Process <http://example.org/marklogic/predicate/responsabilityOf> <http://example.org/marklogic/Official/CPO> .
+}
+COO
+SELECT *
+WHERE { ?Event  <http://example.org/marklogic/predicate/belongsTo> ?Process .  
+      ?Process <http://example.org/marklogic/predicate/responsabilityOf> <http://example.org/marklogic/Official/COO> .
+}
+CEO
+SELECT *
+WHERE { ?Event  <http://example.org/marklogic/predicate/belongsTo> ?Process .  
+      ?Process <http://example.org/marklogic/predicate/responsabilityOf> ?Executive .
+}
+
+====UPDATE====
+xquery version "1.0-ml";
+declare namespace cts="http://marklogic.com/cts";
+import module namespace sem = "http://marklogic.com/semantics" at "/Marklogic/semantics.xqy";
+
+let $triples := cts:triples((),(),sem:iri("http://example.org/marklogic/Official/CEO"))
+for  $triple in  $triples
+	let $node := sem:database-nodes($triple)
+	let $replace := <sem:triple>{$node/sem:subject,$node/sem:predicate}<sem:object>http://example.org/marklogic/Official/CPO</sem:object></sem:triple>
+return $node ! xdmp:node-replace(., $replace)
+
+
+
+VOCABULARY
+PRODUCT===================================================
+EVENT
+<http://example.org/marklogic/Event/Bill>
+<http://example.org/marklogic/Event/Cash>
+<http://example.org/marklogic/Event/Fill>
+<http://example.org/marklogic/Event/Order>
+<http://example.org/marklogic/Event/Ship>
+
+====BELONGS
+<http://example.org/marklogic/predicate/belongsTo>
+
+PROCESS/ES
+<http://example.org/marklogic/Process/Order2Cash>
+
+====MANAGES A BL MADE OF
+<http://example.org/marklogic/predicate/responsabilityOf>
+
+AN EXECUTIVE
+<http://example.org/marklogic/Official/CEO>
+
+SERVICES===================================================
+EVENT
+<http://example.org/marklogic/Event/ServicE1>
+<http://example.org/marklogic/Event/Service2>
+
+====BELONGS
+<http://example.org/marklogic/predicate/belongsTo>
+
+PROCESS/ES
+<http://example.org/marklogic/Process/Services>
+
+====MANAGES A BL MADE OF
+<http://example.org/marklogic/predicate/responsabilityOf>
+
+AN EXECUTIVE
+<http://example.org/marklogic/Official/COO>
+
+CLOUD HOSTING===============================================
+EVENT
+<http://example.org/marklogic/Event/CH_E1>
+<http://example.org/marklogic/Event/CH_E2>
+<http://example.org/marklogic/Event/CH_E3>
+
+====BELONGS
+<http://example.org/marklogic/predicate/belongsTo>
+
+PROCESS/ES
+<http://example.org/marklogic/Process/CloudHosting>
+
+====MANAGES A BL MADE OF
+<http://example.org/marklogic/predicate/responsabilityOf>
+
+AN EXECUTIVE
+<http://example.org/marklogic/Official/COO>
