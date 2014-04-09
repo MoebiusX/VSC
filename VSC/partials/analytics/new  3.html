@@ -1,0 +1,31 @@
+<html>
+	<head></head>
+	<body>
+	<table vspace="15" align="center">
+	<tr><td><p>&nbsp;</p></td></tr>
+	
+	<tr><td><H3 align="center"><a href="/VSC" target="_parent">Business Activity Monitoring</a></H3></td></tr>
+	<tr><td align="center"></td></tr>
+			
+	<tr><td><p>&nbsp;</p></td></tr>
+        </table>
+      <table width="90%" align="center" cellpadding="10">
+		<tr>
+			<th align="center">Products</th>
+            <th align="center">Services</th>
+            <th align="center">Cloud</th>
+		</tr>
+		<tr>
+			<td>Events Received: {let $play := collection()/*[local-name()='BusinessEvent'] return count($play)}</td><td>Events Received: </td><td>Events Received: </td>
+		</tr>
+	  
+	 <!-- <td valign="top" style="text-indent: -15">{
+      for $play in collection()/*[local-name()='BusinessEvent']
+      return
+      <li>{$play/OrderID/text()}</li>   
+      }</td>
+	  -->
+	  </table>
+
+	</body>
+</html>

@@ -31,9 +31,8 @@ xdmp:set-response-content-type("text/html"),
 	<table vspace="20" align="center">
 	<tr><td><p>&nbsp;</p></td></tr>
 	
-	<tr><td><H2 align="center">Business Activity Monitoring</H2></td></tr>
-	<tr><td align="center">
-			<a href="/VSC" target="_parent"><img src="VSC_BM.jpeg" alt="Business Model" align="top"/></a></td></tr>
+	<tr><td><H2 align="center"><a href="/VSC" target="_parent">Business Activity Monitoring</a></H2></td></tr>
+	<tr><td align="center"></td></tr>
 			
 	<tr><td><p>&nbsp;</p></td></tr>
         </table>
@@ -48,25 +47,36 @@ xdmp:set-response-content-type("text/html"),
          
       }</td>
       <td valign="top" style="text-indent: -15">{
-      for $play in xdmp:directory("/shakespeare/plays/")
-      where $play/property::playtype/text() eq "TRAGEDY"
-      order by $play/PLAY/TITLE/text()
+      for $play in collection()/*[local-name()='json']
       return
-      <li><a href="displayScene.xqy?fname={fn:base-uri($play)}&drama=true">{
-          normalize-space(string-join($play/PLAY/TITLE/text(), "") )}</a>
-          </li>
+      <li>{$play//*[local-name()='os']/text()}</li>
          
       }</td>
       <td valign="top" style="text-indent: -15">{
-      for $play in xdmp:directory("/shakespeare/plays/")
-      where $play/property::playtype/text() eq "HISTORY"
-      order by $play/PLAY/TITLE/text()
+      for $play in collection()/*[local-name()='json']
       return
-      <li><a href="displayScene.xqy?fname={fn:base-uri($play)}&drama=true">{
-          normalize-space(string-join($play/PLAY/TITLE/text(), "") )}</a>
-          </li>
-         
-      }</td></tr></table>
+      <li>{$play//*[local-name()='primary']/text()}</li>         
+      }</td>
+	  
+	  <td valign="top" style="text-indent: -15">{
+      for $play in collection()/*[local-name()='json']
+      return
+      <li>{$play//*[local-name()='ui']/text()}</li>         
+      }</td>
+	  
+	  <td valign="top" style="text-indent: -15">{
+      for $play in collection()/*[local-name()='json']
+      return
+      <li>{$play//*[local-name()='wifi']/text()}</li>         
+      }</td>
+	  
+	  <td valign="top" style="text-indent: -15">{
+      for $play in collection()/*[local-name()='json']
+      return
+      <li>{$play//*[local-name()='cpu']/text()}</li>         
+      }</td>
+	  
+	  </tr></table>
 
 	</body>
 </html>
